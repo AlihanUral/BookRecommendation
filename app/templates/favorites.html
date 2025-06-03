@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Favori Kitaplarım</h2>
+  {% if favorites %}
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for book in favorites %}
+    <div class="col">
+      <div class="card h-100">
+        {% if book.thumbnail %}
+        <img src="{{ book.thumbnail }}" class="card-img-top" alt="{{ book.title }}">
+        {% else %}
+        <img src="{{ url_for('static', filename='default_book_cover.jpg') }}" class="card-img-top" alt="Varsayılan Kapak">
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{ book.title }}</h5>
+          <p class="card-text"><strong>Yazar:</strong> {{ book.authors }}</p>
+          <form method="post" action="{{ url_for('main.remove_favorite', book_id=book.book_id) }}">
+            <button type="submit" class="btn btn-danger">Favorilerden Kaldır</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+    <p>Henüz favori kitap eklemediniz.</p>
+  {% endif %}
+</div>
+{% endblock %}

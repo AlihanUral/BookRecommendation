@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Ana Sayfa{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Kitap Öneri Sistemine Hoş Geldiniz</h1>
+{% if current_user.is_authenticated %}
+    <a href="{{ url_for('main.recommend') }}" class="btn btn-primary">Kitap Önerisi Al</a>
+{% else %}
+    <p>Lütfen giriş yaparak kitap önerisi alın.</p>
+    <a href="{{ url_for('main.login') }}" class="btn btn-secondary me-2">Giriş Yap</a>
+    <a href="{{ url_for('main.register') }}" class="btn btn-outline-secondary">Kayıt Ol</a>
+{% endif %}
+{% endblock %}

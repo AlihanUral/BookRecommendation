@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Kayıt Ol{% endblock %}
+
+{% block content %}
+<h2>Kayıt Ol</h2>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="alert alert-info" role="alert">
+      {{ messages[0] }}
+    </div>
+  {% endif %}
+{% endwith %}
+<form method="POST">
+    <div class="mb-3">
+        <label for="username" class="form-label">Kullanıcı Adı</label>
+        <input type="text" class="form-control" id="username" name="username" required>
+    </div>
+    <div class="mb-3">
+        <label for="email" class="form-label">Email adresi</label>
+        <input type="email" class="form-control" id="email" name="email" required>
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">Şifre</label>
+        <input type="password" class="form-control" id="password" name="password" required>
+    </div>
+    <button type="submit" class="btn btn-success">Kayıt Ol</button>
+</form>
+{% endblock %}

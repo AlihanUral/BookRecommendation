@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Kitap Önerileri</h2>
+
+  <form method="post" class="mb-4" onsubmit="showLoading()">
+    <div class="row g-3">
+      <div class="col-md-3">
+        <input type="text" name="genre" class="form-control" placeholder="Tür" value="{{ genre }}">
+      </div>
+      <div class="col-md-3">
+        <input type="text" name="author" class="form-control" placeholder="Yazar" value="{{ author }}">
+      </div>
+      <div class="col-md-3">
+        <input type="text" name="title" class="form-control" placeholder="Başlık" value="{{ title }}">
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Ara</button>
+
+    <div id="loading-message" class="alert alert-info mt-3" style="display: none;">
+      Yükleniyor...
+    </div>
+
+    {% if genre or author or title %}
+    <div class="alert alert-secondary mt-3">
+      <strong>Aktif Filtreler:</strong>
+      {% if genre %} Tür: {{ genre }} {% endif %}
+      {% if author %} | Yazar: {{ author }} {% endif %}
+      {% if title %} | Başlık: {{ title }} {% endif %}
+    </div>
+    {% endif %}
+  </form>
+
+  {% if books %}
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for book in books %}
+    <div class="col">
+      <div class="card h-100">
+        <img src="{{ book.thumbnail }}" class="card-img-top" alt="{{ book.title }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ book.title }}</h5>
+          <p class="card-text"><strong>Yazar:</strong> {{ book.authors }}</p>
+          <form action="{{ url_for('main.add_favorite', book_id=book.id) }}" method="post">
+            <input type="hidden" name="title" value="{{ book.title }}">
+            <input type="hidden" name="authors" value="{{ book.authors }}">
+            <input type="hidden" name="thumbnail" value="{{ book.thumbnail }}">
+            <button type="submit" class="btn btn-outline-primary mt-2">Favorilere Ekle</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p>Henüz kitap bulunamadı. Lütfen filtreleri kullanarak arama yapınız.</p>
+  {% endif %}
+</div>
+
+<script>
+  function showLoading() {
+    document.getElementById('loading-message').style.display = 'block';
+  }
+</script>
+{% endblock %}
