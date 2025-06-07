@@ -17,10 +17,14 @@
       </div>
     </div>
     <button type="submit" class="btn btn-primary mt-3">Ara</button>
-
+    <a href="{{ url_for('main.recommend_from_favorites') }}" class="btn btn-success mt-3 ms-2">Favorilerime Göre Öner</a>
     <div id="loading-message" class="alert alert-info mt-3" style="display: none;">
       Yükleniyor...
     </div>
+
+    {% if message %}
+      <div class="alert alert-warning mt-3">{{ message }}</div>
+    {% endif %}
 
     {% if genre or author or title %}
     <div class="alert alert-secondary mt-3">
