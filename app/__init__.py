@@ -2,6 +2,7 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_migrate import Migrate
 from app.models import db, User
 
 def create_app():
@@ -9,10 +10,12 @@ def create_app():
 
     # Gizli anahtar ve veritabanı konfigürasyonu
     app.config['SECRET_KEY'] = 'gizli-bir-anahtar'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.instance_path, 'site.db')
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     # Veritabanı başlatma
     db.init_app(app)
+    migrate = Migrate(app, db)
 
     # Login manager ayarları
     login_manager = LoginManager()

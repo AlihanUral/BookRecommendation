@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="50" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
+    <!-- Book icon -->
+    <path d="M20 5 L20 45 L40 45 L40 5 Z" fill="#8D6E63"/>
+    <path d="M40 5 L40 45 L60 45 L60 5 Z" fill="#6D4C41"/>
+    <path d="M60 5 L60 45 L80 45 L80 5 Z" fill="#8D6E63"/>
+    
+    <!-- Text -->
+    <text x="90" y="35" font-family="Inter, sans-serif" font-size="24" font-weight="700" fill="#3E2723">BookRec</text>
+</svg> 

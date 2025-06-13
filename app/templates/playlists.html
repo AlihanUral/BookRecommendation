@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Kitap Listelerim</h2>
+    
+    {% if playlists %}
+    <div class="row">
+        {% for playlist in playlists %}
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">{{ playlist.name }}</h5>
+                    <small class="text-muted">{{ playlist.created_at.strftime('%d.%m.%Y') }}</small>
+                </div>
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-muted">Kaynak Kitaplar</h6>
+                    <div class="row row-cols-1 row-cols-md-2 g-2 mb-3">
+                        {% for book in playlist.books.filter_by(is_source=True).all() %}
+                        <div class="col">
+                            <div class="card h-100">
+                                <img src="{{ book.thumbnail }}" class="card-img-top" alt="{{ book.title }}" style="height: 100px; object-fit: cover;">
+                                <div class="card-body p-2">
+                                    <h6 class="card-title">{{ book.title }}</h6>
+                                    <p class="card-text"><small>{{ book.authors }}</small></p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <h6 class="card-subtitle mb-2 text-muted">Önerilen Kitaplar</h6>
+                    <div class="row row-cols-1 row-cols-md-2 g-2">
+                        {% for book in playlist.books.filter_by(is_source=False).all() %}
+                        <div class="col">
+                            <div class="card h-100">
+                                <img src="{{ book.thumbnail }}" class="card-img-top" alt="{{ book.title }}" style="height: 100px; object-fit: cover;">
+                                <div class="card-body p-2">
+                                    <h6 class="card-title">{{ book.title }}</h6>
+                                    <p class="card-text"><small>{{ book.authors }}</small></p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="btn-group" role="group">
+                        <a href="{{ url_for('main.export_playlist', playlist_id=playlist.id) }}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-file-pdf"></i> PDF İndir
+                        </a>
+                        <button type="button" class="btn btn-danger btn-sm" onclick="showDeleteModal('{{ playlist.id }}')">
+                            <i class="fas fa-trash"></i> Listeyi Sil
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Listeyi Sil</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+                <div class="modal-body">
+                    Bu listeyi silmek istediğinizden emin misiniz?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                    <form id="deleteForm" method="post" action="">
+                        <button type="submit" class="btn btn-danger">Evet, Sil</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        Henüz kitap listeniz bulunmuyor. Favorilerinizden yeni bir liste oluşturmak için "Favorilerim" sayfasını ziyaret edin.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function showDeleteModal(playlistId) {
+    const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    document.getElementById('deleteForm').action = `/playlist/delete/${playlistId}`;
+    modal.show();
+}
+</script>
+{% endblock %} 

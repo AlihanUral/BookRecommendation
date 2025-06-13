@@ -1,14 +1,152 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block title %}Ana Sayfa{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">Kitap Öneri Sistemine Hoş Geldiniz</h1>
-{% if current_user.is_authenticated %}
-    <a href="{{ url_for('main.recommend') }}" class="btn btn-primary">Kitap Önerisi Al</a>
-{% else %}
-    <p>Lütfen giriş yaparak kitap önerisi alın.</p>
-    <a href="{{ url_for('main.login') }}" class="btn btn-secondary me-2">Giriş Yap</a>
-    <a href="{{ url_for('main.register') }}" class="btn btn-outline-secondary">Kayıt Ol</a>
-{% endif %}
+<div class="container">
+    <!-- Hero Section -->
+    <div class="text-center py-5">
+        <h1 class="display-4 mb-4 fw-bold">Kitap Dünyasına Hoş Geldiniz</h1>
+        <p class="lead mb-5">BookRec ile kişiselleştirilmiş kitap önerileri alın, favorilerinizi kaydedin ve kendi kitap listelerinizi oluşturun.</p>
+        
+        {% if current_user.is_authenticated %}
+            <div class="d-flex justify-content-center gap-3">
+                <a href="{{ url_for('main.recommend') }}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-book-open me-2"></i>Öneriler Al
+                </a>
+                <a href="{{ url_for('main.favorites') }}" class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-heart me-2"></i>Favorilerim
+                </a>
+            </div>
+        {% else %}
+            <div class="d-flex justify-content-center gap-3">
+                <a href="{{ url_for('main.login') }}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-sign-in-alt me-2"></i>Giriş Yap
+                </a>
+                <a href="{{ url_for('main.register') }}" class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-user-plus me-2"></i>Kayıt Ol
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Features Section -->
+    <div class="row mt-5 g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm hover-card">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-robot fa-2x text-primary"></i>
+                    </div>
+                    <h3 class="card-title h4">Akıllı Öneriler</h3>
+                    <p class="card-text">Yapay zeka destekli sistemimiz, okuma alışkanlıklarınıza göre size özel kitap önerileri sunar.</p>
+                    <ul class="list-unstyled text-start mt-3">
+                        <li><i class="fas fa-check text-success me-2"></i>Kişiselleştirilmiş öneriler</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Benzer yazarlar</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Popüler kategoriler</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm hover-card">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-heart fa-2x text-primary"></i>
+                    </div>
+                    <h3 class="card-title h4">Favori Kitaplarınız</h3>
+                    <p class="card-text">Beğendiğiniz kitapları favorilerinize ekleyin ve daha sonra kolayca erişin.</p>
+                    <ul class="list-unstyled text-start mt-3">
+                        <li><i class="fas fa-check text-success me-2"></i>Kolay favori ekleme</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Hızlı erişim</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Detaylı kitap bilgileri</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm hover-card">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-list fa-2x text-primary"></i>
+                    </div>
+                    <h3 class="card-title h4">Kitap Listeleri</h3>
+                    <p class="card-text">Favori kitaplarınızdan yola çıkarak kendi kitap listelerinizi oluşturun.</p>
+                    <ul class="list-unstyled text-start mt-3">
+                        <li><i class="fas fa-check text-success me-2"></i>Özel listeler</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Otomatik öneriler</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Pdf olarak indirebilme</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How It Works Section -->
+    <div class="row mt-5 py-5">
+        <div class="col-12 text-center mb-4">
+            <h2 class="h3">Nasıl Çalışır?</h2>
+        </div>
+        <div class="col-md-3">
+            <div class="text-center">
+                <div class="step-number mb-3">1</div>
+                <h4>Kitap Ara</h4>
+                <p>Yazar, başlık veya kategoriye göre kitap arayın</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="text-center">
+                <div class="step-number mb-3">2</div>
+                <h4>Favorilere Ekle</h4>
+                <p>Beğendiğiniz kitapları favorilerinize ekleyin</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="text-center">
+                <div class="step-number mb-3">3</div>
+                <h4>Liste Oluştur</h4>
+                <p>Favorilerinizden yeni bir liste oluşturun</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="text-center">
+                <div class="step-number mb-3">4</div>
+                <h4>Önerileri Keşfet</h4>
+                <p>Size özel kitap önerilerini keşfedin</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.hover-card {
+    transition: transform 0.2s ease-in-out;
+}
+
+.hover-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 50%;
+    background: rgba(13, 110, 253, 0.1);
+    margin: 0 auto;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 50%;
+    background: var(--bs-primary);
+    color: white;
+    font-weight: bold;
+    margin: 0 auto;
+}
+</style>
 {% endblock %}

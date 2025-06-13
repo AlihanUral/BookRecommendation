@@ -4,28 +4,125 @@
 <div class="container mt-4">
   <h2>Favori Kitaplarım</h2>
   {% if favorites %}
-  <div class="row row-cols-1 row-cols-md-3 g-4">
-    {% for book in favorites %}
-    <div class="col">
+  <div class="text-start mb-4">
+    <form action="{{ url_for('main.create_playlist') }}" method="post" id="createPlaylistForm">
+      <button type="submit" class="btn btn-primary" id="createPlaylistBtn">
+        <i class="fas fa-list"></i> Favorilerimden Kitap Öner
+      </button>
+    </form>
+  </div>
+  <div class="row">
+    {% for favorite in favorites %}
+    <div class="col-md-4 mb-4">
       <div class="card h-100">
-        {% if book.thumbnail %}
-        <img src="{{ book.thumbnail }}" class="card-img-top" alt="{{ book.title }}">
-        {% else %}
-        <img src="{{ url_for('static', filename='default_book_cover.jpg') }}" class="card-img-top" alt="Varsayılan Kapak">
-        {% endif %}
+        <div class="book-cover-wrapper">
+          <img src="{{ favorite.thumbnail }}" class="book-cover" alt="{{ favorite.title }}" loading="lazy">
+        </div>
         <div class="card-body">
-          <h5 class="card-title">{{ book.title }}</h5>
-          <p class="card-text"><strong>Yazar:</strong> {{ book.authors }}</p>
-          <form method="post" action="{{ url_for('main.remove_favorite', book_id=book.book_id) }}">
-            <button type="submit" class="btn btn-danger">Favorilerden Kaldır</button>
+          <h5 class="card-title">{{ favorite.title }}</h5>
+          <p class="card-text">{{ favorite.authors }}</p>
+          {% if favorite.description %}
+          <p class="card-text"><small class="text-muted">{{ favorite.description[:100] }}...</small></p>
+          {% endif %}
+        </div>
+        <div class="card-footer">
+          <form action="{{ url_for('main.remove_favorite', book_id=favorite.book_id) }}" method="post" class="d-inline">
+            <button type="submit" class="btn btn-danger btn-sm">
+              <i class="fas fa-trash"></i> Favorilerden Kaldır
+            </button>
           </form>
         </div>
       </div>
     </div>
     {% endfor %}
   </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay d-none" id="loadingOverlay">
+    <div class="spinner-container">
+      <div class="spinner-border text-primary" role="status" style="width: 4rem; height: 4rem;">
+        <span class="visually-hidden">Yükleniyor...</span>
+      </div>
+      <p class="mt-3 text-primary fw-bold">Kitaplar aranıyor...</p>
+    </div>
+  </div>
   {% else %}
-    <p>Henüz favori kitap eklemediniz.</p>
+  <div class="alert alert-info">
+    Henüz favori kitabınız bulunmuyor. Kitap önerileri sayfasından favori kitap ekleyebilirsiniz.
+  </div>
   {% endif %}
 </div>
+
+<style>
+.book-cover-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 150%; /* 2:3 aspect ratio */
+  overflow: hidden;
+  background-color: #f8f9fa;
+}
+
+.book-cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.card:hover .book-cover {
+  transform: scale(1.05);
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.spinner-container {
+  text-align: center;
+}
+
+.spinner-border {
+  border-width: 0.35em;
+  animation: spinner-border 1s linear infinite;
+}
+
+@keyframes spinner-border {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner-container p {
+  font-size: 1.2rem;
+  margin-top: 1rem;
+}
+</style>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('createPlaylistForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const loadingOverlay = document.getElementById('loadingOverlay');
+  loadingOverlay.classList.remove('d-none');
+  
+  // Submit the form after showing the spinner
+  setTimeout(() => {
+    this.submit();
+  }, 100);
+});
+</script>
 {% endblock %}

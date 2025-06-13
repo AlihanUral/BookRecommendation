@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ playlist.name }} - BookRec</title>
+    <style>
+        @page {
+            margin: 2.5cm;
+            @top-right {
+                content: "BookRec";
+                font-size: 9pt;
+                color: #666;
+            }
+            @bottom-center {
+                content: counter(page);
+                font-size: 9pt;
+            }
+        }
+        body {
+            font-family: "Helvetica", "Arial", sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 2cm;
+        }
+        .header h1 {
+            color: #0d6efd;
+            font-size: 24pt;
+            margin-bottom: 0.5cm;
+        }
+        .header p {
+            color: #666;
+            font-size: 12pt;
+        }
+        .section {
+            margin-bottom: 1.5cm;
+        }
+        .section-title {
+            color: #0d6efd;
+            font-size: 16pt;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.3cm;
+            margin-bottom: 0.8cm;
+        }
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1cm;
+        }
+        .book-card {
+            border: 1px solid #ddd;
+            padding: 0.8cm;
+            border-radius: 0.3cm;
+        }
+        .book-title {
+            font-size: 14pt;
+            font-weight: bold;
+            margin-bottom: 0.3cm;
+            color: #333;
+        }
+        .book-author {
+            font-size: 12pt;
+            color: #666;
+            margin-bottom: 0.3cm;
+        }
+        .book-description {
+            font-size: 10pt;
+            color: #666;
+            margin-bottom: 0.3cm;
+        }
+        .book-rating {
+            font-size: 10pt;
+            color: #666;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 2cm;
+            font-size: 9pt;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>{{ playlist.name }}</h1>
+        <p>Oluşturulma Tarihi: {{ playlist.created_at.strftime('%d.%m.%Y') }}</p>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Kaynak Kitaplar</h2>
+        <div class="book-grid">
+            {% for book in playlist.books.filter_by(is_source=True).all() %}
+            <div class="book-card">
+                <div class="book-title">{{ book.title }}</div>
+                <div class="book-author">{{ book.authors }}</div>
+                {% if book.description %}
+                <div class="book-description">{{ book.description[:200] }}{% if book.description|length > 200 %}...{% endif %}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Önerilen Kitaplar</h2>
+        <div class="book-grid">
+            {% for book in playlist.books.filter_by(is_source=False).all() %}
+            <div class="book-card">
+                <div class="book-title">{{ book.title }}</div>
+                <div class="book-author">{{ book.authors }}</div>
+                {% if book.description %}
+                <div class="book-description">{{ book.description[:200] }}{% if book.description|length > 200 %}...{% endif %}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Bu liste BookRec tarafından oluşturulmuştur.</p>
+        <p>© 2024 BookRec. Tüm hakları saklıdır.</p>
+    </div>
+</body>
+</html> 
